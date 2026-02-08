@@ -1,14 +1,20 @@
-class CheckboxesPage {
-  get elements() {
-    return {
-      header: () => $("h3"),
-      checkbox: (num) => $(`input:nth-child(${num})`),
-    };
+import { $ } from "@wdio/globals";
+import BasePage from "./base.page.js";
+
+class CheckboxesPage extends BasePage {
+  get header() { return $("h3"); }
+  checkbox = (num) => $(`#checkboxes input:nth-of-type(${num})`);
+
+  async open() {
+    await super.open("checkboxes");
   }
 
   async select(num) {
-    const checkbox = await this.elements.checkbox(num);
-    await checkbox.click();
+    const box = await this.checkbox(num);
+    await box.waitForClickable();
+    if (!(await box.isSelected())) {
+      await box.click();
+    }
   }
 }
 
