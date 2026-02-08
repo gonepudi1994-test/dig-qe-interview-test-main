@@ -1,12 +1,16 @@
-import { When, Then } from "@wdio/cucumber-framework";
+import { Given, When, Then } from "@wdio/cucumber-framework";
 import { expect } from "@wdio/globals";
-import checkboxesPage from "../pageobjects/checkboxes.page.js";
+import CheckboxesPage from "../pageobjects/checkboxes.page.js";
 
-When(/^I select checkbox (\d)$/, async function (num) {
-  this.checkbox = await checkboxesPage.elements.checkbox(num);
-  await checkboxesPage.select(num);
+Given("I am on the checkboxes page", async () => {
+  await CheckboxesPage.open();
 });
 
-Then(/^The checkbox should be checked$/, async function () {
-  await expect(this.checkbox).toHaveAttribute("checked");
+When(/^I select checkbox (\d+)$/, async (num) => {
+  await CheckboxesPage.select(num);
+  this.checkbox = await CheckboxesPage.checkbox(num);
+});
+
+Then("The checkbox should be checked", async function () {
+  await expect(this.checkbox).toBeSelected();
 });
