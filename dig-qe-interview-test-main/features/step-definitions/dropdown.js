@@ -1,14 +1,15 @@
-import { When, Then, world } from "@cucumber/cucumber";
+import { Given, When, Then } from "@wdio/cucumber-framework";
 import { expect } from "@wdio/globals";
-import dropdownPage from "../pageobjects/dropdown.page.js";
+import DropdownPage from "../pageobjects/dropdown.page.js";
 
-When(/^I select "(.+)"$/, async function (option) {
-  world.hello = "hello";
-  console.log(world);
-  await dropdownPage.select(option);
+Given("I am on the dropdown page", async () => {
+  await DropdownPage.open();
 });
 
-Then(/^The dropdown value should be "(.+)"$/, async function (option) {
-  console.log(world);
-  expect(await dropdownPage.selectedOptionText()).toBe(option);
+When(/^I select option (\d+)$/, async (index) => {
+  await DropdownPage.selectByIndex(index);
+});
+
+Then(/^I should see option (.*) selected$/, async (text) => {
+  await expect(await DropdownPage.getSelectedText()).toContain(text);
 });
