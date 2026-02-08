@@ -1,14 +1,22 @@
-class DropdownPage {
-  get elements() {
-    return {
-      header: () => $("h3"),
-      input: () => $("/html/body/div[2]/div/div/div/div/input"),
-    };
+import { $ } from "@wdio/globals";
+import BasePage from "./base.page.js";
+
+class InputsPage extends BasePage {
+  get input() { return $("input[type='number']"); }
+
+  async open() {
+    await super.open("inputs");
   }
 
-  async set(value) {
-    await (await this.elements.input()).setValue(value);
+  async enterNumber(num) {
+    await this.input.waitForDisplayed();
+    await this.input.clearValue();
+    await this.input.setValue(num);
+  }
+
+  async getValue() {
+    return this.input.getValue();
   }
 }
 
-export default new DropdownPage();
+export default new InputsPage();
