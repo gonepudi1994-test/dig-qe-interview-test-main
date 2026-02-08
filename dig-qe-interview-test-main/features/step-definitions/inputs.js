@@ -1,12 +1,15 @@
-import { When, Then } from "@cucumber/cucumber";
+import { Given, When, Then } from "@wdio/cucumber-framework";
 import { expect } from "@wdio/globals";
-import inputsPage from "../pageobjects/inputs.page.js";
+import InputsPage from "../pageobjects/inputs.page.js";
 
-When(/^I enter "(\d+)"$/, async function (num) {
-  this.num = num;
-  await inputsPage.set(num);
+Given("I am on the inputs page", async () => {
+  await InputsPage.open();
 });
 
-Then(/^The input value should be the number I entered$/, async function () {
-  expect(await inputsPage.elements.input()).toHaveValue(this.num);
+When(/^I enter (\d+)$/, async (num) => {
+  await InputsPage.enterNumber(num);
+});
+
+Then(/^I should see (\d+) in the input$/, async (num) => {
+  await expect(await InputsPage.getValue()).toBe(num);
 });
